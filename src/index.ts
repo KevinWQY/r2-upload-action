@@ -67,18 +67,19 @@ const run = async (config: R2Config) => {
 
         if (fileKey.includes('.gitkeep'))
             continue;
-        
-        console.log(fileKey);
+
+        const uploadKey = fileKey.replace(/\\/g, "/");
+        console.log(uploadKey);
         const mimeType = mime.getType(file);
 
         const uploadParams: PutObjectCommandInput = {
             Bucket: config.bucket,
-            Key: fileKey,
+            Key: uploadKey,
             Body: fileStream,
             ContentLength: fs.statSync(file).size,
             ContentType: mimeType ?? 'application/octet-stream'
         };
-        
+
         const cmd = new PutObjectCommand(uploadParams);
 
         const digest = md5(fileStream);
