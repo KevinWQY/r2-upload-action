@@ -68,7 +68,9 @@ const run = async (config: R2Config) => {
         if (fileKey.includes('.gitkeep'))
             continue;
 
-        const uploadKey = fileKey.replace(/\\/g, "/");
+        const filePaths = fileKey.split(path.sep);
+        const uploadKey = filePaths.join("/");
+
         console.log(uploadKey);
         const mimeType = mime.getType(file);
 
