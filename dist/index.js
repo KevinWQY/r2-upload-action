@@ -60205,17 +60205,16 @@ const run = async (config) => {
         const uploadKey = filePaths.join("/");
         console.log(`uploadKey - ${uploadKey}`);
         const mimeType = mime__WEBPACK_IMPORTED_MODULE_3___default().getType(file);
-        let encodingType = "";
-        if (uploadKey.endsWith(".unityweb"))
-            encodingType = "gzip";
-        const uploadParams = {
+        let uploadParams = {
             Bucket: config.bucket,
             Key: uploadKey,
             Body: fileStream,
             ContentLength: fs__WEBPACK_IMPORTED_MODULE_2__.statSync(file).size,
             ContentType: mimeType ?? 'application/octet-stream',
-            ContentEncoding: encodingType
         };
+        if (uploadKey.endsWith(".unityweb")) {
+            uploadParams.ContentEncoding = "gzip";
+        }
         const cmd = new _aws_sdk_client_s3__WEBPACK_IMPORTED_MODULE_6__.PutObjectCommand(uploadParams);
         const digest = md5__WEBPACK_IMPORTED_MODULE_4___default()(fileStream);
         cmd.middlewareStack.add((next) => async (args) => {
