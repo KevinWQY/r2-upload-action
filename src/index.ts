@@ -78,12 +78,17 @@ const run = async (config: R2Config) => {
         console.log(`uploadKey - ${uploadKey}`);
         const mimeType = mime.getType(file);
 
+        let encodingType = "";
+        if (uploadKey.endsWith(".unityweb"))
+            encodingType = "gzip";
+
         const uploadParams: PutObjectCommandInput = {
             Bucket: config.bucket,
             Key: uploadKey,
             Body: fileStream,
             ContentLength: fs.statSync(file).size,
-            ContentType: mimeType ?? 'application/octet-stream'
+            ContentType: mimeType ?? 'application/octet-stream',
+            ContentEncoding: encodingType
         };
 
         const cmd = new PutObjectCommand(uploadParams);
